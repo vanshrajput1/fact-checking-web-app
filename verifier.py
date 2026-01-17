@@ -1,13 +1,23 @@
+import os
 import streamlit as st
 from google import genai
 from tavily import TavilyClient
+from dotenv import load_dotenv
+
+load_dotenv()
+
+def get_key(name):
+    try:
+        return st.secrets[name]
+    except Exception:
+        return os.getenv(name)
 
 client = genai.Client(
-    api_key=st.secrets["GEMINI_API_KEY"]
+    api_key=get_key("GEMINI_API_KEY")
 )
 
 tavily = TavilyClient(
-    api_key=st.secrets["TAVILY_API_KEY"]
+    api_key=get_key("TAVILY_API_KEY")
 )
 
 def verify_claim(claim):
