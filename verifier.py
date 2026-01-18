@@ -21,17 +21,38 @@ tavily = TavilyClient(
 )
 
 def verify_claim(claim):
-    search = tavily.search(claim, max_results=5)
+    search = tavily.search(
+    f"latest real-time data {claim}",
+    max_results=5
+)
+
 
     prompt = f"""
-    Claim: {claim}
+You are a professional fact-checking system.
 
-    Web Evidence:
-    {search}
+Rules:
+- Use ONLY reliable, real-time web sources from the evidence provided.
+- If the claim is outdated, speculative, or unsupported, classify it as False.
+- When correcting a claim, give the latest confirmed value.
+- If the claim involves a numeric value (price, percentage, amount), you MUST provide the latest confirmed real-time value if available.
 
-    Classify as Verified, Inaccurate, or False.
-    Provide correction if needed.
-    """
+Output format:
+
+<Verified:| Inaccurate: | False:>
+<Correct real-time information or "Not applicable">
+Sources: <Comma-separated source names>
+
+Do NOT put multiple fields on the same line.
+Do NOT add extra text.
+
+
+
+Claim:
+{claim}
+
+Web Evidence:
+{search}
+"""
 
     response = client.models.generate_content(
         model="gemini-2.5-flash",
@@ -39,3 +60,4 @@ def verify_claim(claim):
     )
 
     return response.text
+
