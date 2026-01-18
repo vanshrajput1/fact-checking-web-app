@@ -35,7 +35,7 @@ Rules:
 - If the claim is outdated, speculative, or unsupported, classify it as False.
 - When correcting a claim, give the latest confirmed value.
 - If the claim involves a numeric value (price, percentage, amount), you MUST provide the latest confirmed real-time value if available.
-
+- For conceptual claims, provide a brief explanation and at least one credible source instead of "Not applicable".
 Output format:
 
 <Verified:| Inaccurate: | False:>
